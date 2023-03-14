@@ -67,6 +67,24 @@ def string_to_timestamp(string):
     return datetime_to_timestamp(string_to_datetime(string))
     
 
+def dump_data(data):
+    """ 데이터를 파일로 저장하는 함수 """
+    import json
+
+    return json.dumps(data)
+
+def compress_data(str_data):
+    """ 데이터를 압축하는 함수 """
+    import zlib
+    return zlib.compress(str_data.encode())
+
+    # import gzip
+    # return gzip.compress(str_data.encode())
+
+def compress_dict(dict_data):
+    """ dict 데이터를 압축하는 함수 """
+    return compress_data(dump_data(dict_data))
+
 def convert_single_data(data):
     """ 하나의 데이터를 받아서 변환을 수행하고 결과를 반환한다. """
 
@@ -118,15 +136,19 @@ if __name__ == "__main__":
         # 복호화된 데이터를 json(dict)으로 변환한다.
         # 각 데이터에서 개별적으로 변환이 필요한 부분에 변환을 수행한다.
         _json = convert_single_data(i)
-        print(_json)
-        print(type(_json))
+        # print(_json); print()
 
-        # import gzip
+        _compress = compress_dict(_json)
+        print(_compress) # bytes
+        # print(len(_compress)) # zlib : 196 / gzip : 208
+        # print()
 
         # 타임스탬프를 datetime으로 변환 (decrypt_str['inDate']의 값과 동일함)
         datetime = timestamp_to_datetime(i['ArrivalTimeStamp'])
 
         # 연, 월, 일, 시를 출력, 데이터 저장시 사용
         times = [datetime.year, datetime.month, datetime.day, datetime.hour]
-        print(times); print()
+        # print(times); print()
+
+        break
 
