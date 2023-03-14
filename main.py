@@ -49,6 +49,24 @@ def timestamp_to_datetime(timestamp):
 
     return datetime.datetime.fromtimestamp(timestamp)
 
+def datetime_to_timestamp(datetime):
+    """ datetime을 타임스탬프로 변환하는 함수 """
+    import time
+
+    return time.mktime(datetime.timetuple())
+
+def string_to_datetime(string):
+    """ 문자열을 datetime으로 변환하는 함수 """
+    import datetime
+
+    return datetime.datetime.strptime(string, '%Y-%m-%dT%H:%M:%S.%fZ')
+
+def string_to_timestamp(string):
+    """ 문자열을 타임스탬프로 변환하는 함수 """
+
+    return datetime_to_timestamp(string_to_datetime(string))
+    
+
 def convert_single_data(data):
     """ 하나의 데이터를 받아서 변환을 수행하고 결과를 반환한다. """
 
@@ -78,8 +96,8 @@ def convert_single_data(data):
     _json['method'] = convert_method_to_int(_json['method'])
     # print(_json['method'])
 
-    # breakpoint()
-    print(_json['inDate'])
+    # 5 inDate : string(datetime) -> timestamp로 변환
+    _json['inDate'] = string_to_timestamp(_json['inDate'])
 
     return _json
 
@@ -103,7 +121,7 @@ print()
 #     # print(i['data'])
 
 _json = convert_single_data(data[0])
-# print(_json)
+print(_json)
 
 # ----------------------------------------------------------------------------------------------
 # 미리 주어진 대칭키를 이용한 복호화를 수행한다. (샘플)
