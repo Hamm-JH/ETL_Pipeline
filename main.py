@@ -49,6 +49,42 @@ def timestamp_to_datetime(timestamp):
 
     return datetime.datetime.fromtimestamp(timestamp)
 
+def convert_single_data(data):
+    """ 하나의 데이터를 받아서 변환을 수행하고 결과를 반환한다. """
+
+    # 1 미리 주어진 대칭키를 이용한 복호화를 수행한다.
+    key = b't-jdqnDewRx9kWithdsTMS21eLrri70TpkMq2A59jX8='
+    decrypt_str = decrypt_data(key, data['data']).decode('utf-8')
+    # print(decrypt_str); print()
+
+    # 2 복호화된 데이터를 json(dict)으로 변환한다.
+    _json = str_to_json(decrypt_str)
+    print(_json)
+    print(type(_json))
+    print(_json['user_id']) # user_id : b64uuid 사용해서 축소할 예정
+    print(_json['record_id'])
+    print(_json['activity'])
+    print(_json['url'])
+    print(_json['method']) # method : POST, GET, PUT, DELETE, 1,2,3,4로 변환할 예정
+    print(_json['name'])
+    print(_json['inDate']) # inDate : datetime -> timestamp로 변환할 예정
+    print(_json['detail'])
+
+    # 3 uuid64 -> 문자열 길이 44만큼 축소
+    _json['user_id'] = encode_b64uuid_64(_json['user_id'])
+    print(_json['user_id'])
+
+    # 4 method : POST, GET, PUT, DELETE, 1,2,3,4로 변환
+    _json['method'] = convert_method_to_int(_json['method'])
+    # print(_json['method'])
+
+    # breakpoint()
+    print(_json['inDate'])
+
+    return _json
+
+
+
 # ----------------------------------------------------------------------------------------------
 
 # requests 모듈을 사용하여 데이터를 가져온다.
@@ -66,39 +102,40 @@ print()
 #     # print(i['ArrivalTimeStamp'])
 #     # print(i['data'])
 
+_json = convert_single_data(data[0])
+# print(_json)
+
 # ----------------------------------------------------------------------------------------------
 # 미리 주어진 대칭키를 이용한 복호화를 수행한다. (샘플)
 
-key = b't-jdqnDewRx9kWithdsTMS21eLrri70TpkMq2A59jX8='
-decrypt_str = decrypt_data(key, data[0]['data']).decode('utf-8')
-print(decrypt_str); print()
+# key = b't-jdqnDewRx9kWithdsTMS21eLrri70TpkMq2A59jX8='
+# decrypt_str = decrypt_data(key, data[0]['data']).decode('utf-8')
+# print(decrypt_str); print()
 
 # ----------------------------------------------------------------------------------------------
 # 복호화된 데이터를 json(dict)으로 변환한다.
 
-_json = str_to_json(decrypt_str)
-print(_json)
-print(type(_json))
-print(_json['user_id']) # user_id : b64uuid 사용해서 축소할 예정
-print(_json['record_id'])
-print(_json['activity'])
-print(_json['url'])
-print(_json['method']) # method : POST, GET, PUT, DELETE, 1,2,3,4로 변환할 예정
-print(_json['name'])
-print(_json['inDate']) # inDate : datetime -> timestamp로 변환할 예정
-print(_json['detail'])
+# _json = str_to_json(decrypt_str)
+# print(_json)
+# print(type(_json))
+# print(_json['user_id']) # user_id : b64uuid 사용해서 축소할 예정
+# print(_json['record_id'])
+# print(_json['activity'])
+# print(_json['url'])
+# print(_json['method']) # method : POST, GET, PUT, DELETE, 1,2,3,4로 변환할 예정
+# print(_json['name'])
+# print(_json['inDate']) # inDate : datetime -> timestamp로 변환할 예정
+# print(_json['detail'])
 
 # ----------------------------------------------------------------------------------------------
-# uuid64 -> 문자열 길이 44만큼 축소
-
-_json['user_id'] = encode_b64uuid_64(_json['user_id'])
-# print(_json['user_id'])
+# # uuid64 -> 문자열 길이 44만큼 축소
+# _json['user_id'] = encode_b64uuid_64(_json['user_id'])
+# # print(_json['user_id'])
 
 # ----------------------------------------------------------------------------------------------
-# method : POST, GET, PUT, DELETE, 1,2,3,4로 변환
-
-_json['method'] = convert_method_to_int(_json['method'])
-# print(_json['method'])
+# # method : POST, GET, PUT, DELETE, 1,2,3,4로 변환
+# _json['method'] = convert_method_to_int(_json['method'])
+# # print(_json['method'])
 
 # ----------------------------------------------------------------------------------------------
 
