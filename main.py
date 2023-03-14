@@ -98,41 +98,35 @@ def convert_single_data(data):
 
     # 5 inDate : string(datetime) -> timestamp로 변환
     _json['inDate'] = string_to_timestamp(_json['inDate'])
-    print(_json['inDate'])
+    # print(_json['inDate'])
 
     return _json
 
 
 
-# ----------------------------------------------------------------------------------------------
+if __name__ == "__main__":
+    # requests 모듈을 사용하여 데이터를 가져온다.
+    url = "http://ec2-3-37-12-122.ap-northeast-2.compute.amazonaws.com/api/data/log"
+    data = req_data(url)
 
-# requests 모듈을 사용하여 데이터를 가져온다.
-url = "http://ec2-3-37-12-122.ap-northeast-2.compute.amazonaws.com/api/data/log"
-data = req_data(url)
+    for i in data:
+        # print(i['recordId']) # ex) 5822
+        # print(i['ArrivalTimeStamp']) # ex) 1678412891.818
+        # print(i['data']) # ex) [암호화된 데이터]
 
-# print(data[0])
-# print(data[0]['recordId'])
-# print(data[0]['ArrivalTimeStamp'])
-print(data[0]['data']) # 복호화 대상
-print()
+        # 미리 주어진 대칭키를 이용한 복호화를 수행한다.
+        # 복호화된 데이터를 json(dict)으로 변환한다.
+        # 각 데이터에서 개별적으로 변환이 필요한 부분에 변환을 수행한다.
+        _json = convert_single_data(i)
+        print(_json)
+        print(type(_json))
 
-# for i in data:
-#     print(i['recordId'])
-#     # print(i['ArrivalTimeStamp'])
-#     # print(i['data'])
+        # import gzip
 
-# ----------------------------------------------------------------------------------------------
+        # 타임스탬프를 datetime으로 변환 (decrypt_str['inDate']의 값과 동일함)
+        datetime = timestamp_to_datetime(i['ArrivalTimeStamp'])
 
-_json = convert_single_data(data[0])
-print(_json)
+        # 연, 월, 일, 시를 출력, 데이터 저장시 사용
+        times = [datetime.year, datetime.month, datetime.day, datetime.hour]
+        print(times); print()
 
-# ----------------------------------------------------------------------------------------------
-
-# 타임스탬프를 datetime으로 변환 (decrypt_str['inDate']의 값과 동일함)
-datetime = timestamp_to_datetime(data[0]['ArrivalTimeStamp'])
-
-# 연, 월, 일, 시를 출력, 데이터 저장시 사용
-times = [datetime.year, datetime.month, datetime.day, datetime.hour]
-print(times)
-
-# ----------------------------------------------------------------------------------------------
