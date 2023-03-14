@@ -1,8 +1,15 @@
-import requests
+
+def req_data(url):
+    """ url을 받아서 json 형태로 반환하는 함수 """
+    import requests
+
+    response = requests.get(url)
+
+    return response.json()
 
 url = "http://ec2-3-37-12-122.ap-northeast-2.compute.amazonaws.com/api/data/log"
-response = requests.get(url)
-data = response.json()
+data = req_data(url)
+
 
 # print(data[0])
 # print(data[0]['recordId'])
