@@ -30,6 +30,19 @@ def encode_b64uuid_64(b64uuid):
 
     return start32.string + end32.string
 
+def convert_method_to_int(method):
+    """ method를 int로 변환하는 함수 """
+    if method == 'POST':
+        return 1
+    elif method == 'GET':
+        return 2
+    elif method == 'PUT':
+        return 3
+    elif method == 'DELETE':
+        return 4
+    else:
+        return 0
+
 def timestamp_to_datetime(timestamp):
     """ 타임스탬프를 datetime으로 변환하는 함수 """
     import datetime
@@ -80,6 +93,12 @@ print(_json['detail'])
 
 _json['user_id'] = encode_b64uuid_64(_json['user_id'])
 # print(_json['user_id'])
+
+# ----------------------------------------------------------------------------------------------
+# method : POST, GET, PUT, DELETE, 1,2,3,4로 변환
+
+_json['method'] = convert_method_to_int(_json['method'])
+# print(_json['method'])
 
 # ----------------------------------------------------------------------------------------------
 
