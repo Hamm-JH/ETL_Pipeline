@@ -8,8 +8,12 @@ import datetime
 timestamp = 1463460958000
 datetimeobj = datetime.datetime.fromtimestamp(timestamp/1000)
 print(datetimeobj)
+print(type(datetimeobj))
+print()
 
 # datetime to timestamp
 import time
 timestamp = time.mktime(datetimeobj.timetuple())
 print(timestamp)
+print(type(timestamp))
+print()
