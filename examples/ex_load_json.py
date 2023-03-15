@@ -14,4 +14,6 @@ private_json_path = os.path.join(parent_dir, 'env/private.json')
 with open(private_json_path, 'r') as f:
     private_data = json.load(f)
 
-print(private_data)
+# print(private_data)
+print(private_data['aws_access_key_id'])
+print(private_data['aws_secret_access_key'])
