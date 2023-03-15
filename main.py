@@ -120,7 +120,34 @@ def convert_single_data(data):
 
     return _json
 
+def get_private_data():
+    """ 개인 데이터를 가져오는 함수 """
+    import json
 
+    with open('env/private.json', 'r') as f:
+        data = json.load(f)
+    
+    return data['aws_access_key_id'], data['aws_secret_access_key'], data['aws_s3_bucket_name']
+
+def send_to_aws_s3(data, times):
+    """ 데이터를 AWS S3에 전송하는 함수 """
+    aws_access_key_id, aws_secret_access_key, aws_s3_bucket_name = get_private_data()
+
+    import boto3
+
+    # 파일 이름을 작성한다.
+    filename = f'{times[3]}:{times[4]}:{times[5]}.{times[6]}.txt'
+    # print(filename)
+
+    # aws s3에 파일이 저장될 위치(파일 이름 포함)를 생성한다.
+    file_path = f"data/{times[0]}/{times[1]}/{times[2]}/{times[3]}/{filename}"
+    # print(path)
+
+    # AWS S3에 접근하기 위한 클라이언트를 생성한다.
+    s3 = boto3.resource('s3', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key)
+    
+    # aws s3에 file_path의 위치에 data를 저장한다.
+    s3.Object(aws_s3_bucket_name, file_path).put(Body=data)
 
 if __name__ == "__main__":
     # requests 모듈을 사용하여 데이터를 가져온다.
@@ -147,8 +174,12 @@ if __name__ == "__main__":
         datetime = timestamp_to_datetime(i['ArrivalTimeStamp'])
 
         # 연, 월, 일, 시를 출력, 데이터 저장시 사용
-        times = [datetime.year, datetime.month, datetime.day, datetime.hour]
+        times = [datetime.year, datetime.month, datetime.day, datetime.hour, datetime.minute, datetime.second, datetime.microsecond // 1000]
         # print(times); print()
 
+        # 생성된 파일을 AWS S3에 전송한다.
+        send_to_aws_s3(_compress, times)
+
+        # TODO : 데이터 스케줄링 시작 이전에 break 제거하기
         break
 
