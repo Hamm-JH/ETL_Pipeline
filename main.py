@@ -129,6 +129,19 @@ def get_private_data():
     
     return data['aws_access_key_id'], data['aws_secret_access_key'], data['aws_s3_bucket_name']
 
+def send_to_aws_s3_path(data, file_path):
+    """ 데이터를 AWS S3에 전송하는 함수 """
+    aws_access_key_id, aws_secret_access_key, aws_s3_bucket_name = get_private_data()
+
+    import boto3
+
+    # AWS S3에 접근하기 위한 클라이언트를 생성한다.
+    s3 = boto3.resource('s3', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key)
+
+    # AWS S3에 파일을 저장한다.
+    s3.Object(aws_s3_bucket_name, file_path).put(Body=data)
+    # s3.Bucket(aws_s3_bucket_name).put_object(Key=file_path, Body=data)
+
 def send_to_aws_s3(data, times):
     """ 데이터를 AWS S3에 전송하는 함수 """
     aws_access_key_id, aws_secret_access_key, aws_s3_bucket_name = get_private_data()
@@ -140,8 +153,8 @@ def send_to_aws_s3(data, times):
     # print(filename)
 
     # aws s3에 파일이 저장될 위치(파일 이름 포함)를 생성한다.
-    file_path = f"localtest/{times[0]}/{times[1]}/{times[2]}/{times[3]}/{filename}"
-    # file_path = f"data/{times[0]}/{times[1]}/{times[2]}/{times[3]}/{filename}"
+    # file_path = f"localtest/{times[0]}/{times[1]}/{times[2]}/{times[3]}/{filename}"
+    file_path = f"data/{times[0]}/{times[1]}/{times[2]}/{times[3]}/{filename}"
     # print(path)
 
     # AWS S3에 접근하기 위한 클라이언트를 생성한다.
@@ -155,6 +168,10 @@ if __name__ == "__main__":
     url = "http://ec2-3-37-12-122.ap-northeast-2.compute.amazonaws.com/api/data/log"
     data = req_data(url)
 
+    _data = {}
+
+    # 먼저 데이터를 분할한다.
+    # 파일 패스를 키값으로 설정
     for i in data:
         # print(i['recordId']) # ex) 5822
         # print(i['ArrivalTimeStamp']) # ex) 1678412891.818
@@ -164,12 +181,13 @@ if __name__ == "__main__":
         # 복호화된 데이터를 json(dict)으로 변환한다.
         # 각 데이터에서 개별적으로 변환이 필요한 부분에 변환을 수행한다.
         _json = convert_single_data(i)
-        # print(_json); print()
+        # print(_json)
+        # print(type(_json))
 
-        _compress = compress_dict(_json)
-        print(_compress) # bytes
-        # print(len(_compress)) # zlib : 196 / gzip : 208
-        # print()
+        # # 데이터를 압축한다.
+        # _compress = compress_dict(_json)
+        # # print(_compress) # bytes
+        # # print(len(_compress)) # zlib : 196 / gzip : 208
 
         # 타임스탬프를 datetime으로 변환 (decrypt_str['inDate']의 값과 동일함)
         datetime = timestamp_to_datetime(i['ArrivalTimeStamp'])
@@ -178,9 +196,37 @@ if __name__ == "__main__":
         times = [datetime.year, datetime.month, datetime.day, datetime.hour, datetime.minute, datetime.second, datetime.microsecond // 1000]
         # print(times); print()
 
+        # 키로 사용
+        path = f"data/{times[0]}/{times[1]}/{times[2]}/{times[3]}/"
+        # print(path); print()
+
+        if path in _data:
+            _data[path].append(_json)
+        else:
+            _data[path] = [_json]
+
+
         # 생성된 파일을 AWS S3에 전송한다.
-        send_to_aws_s3(_compress, times)
+        # TODO : 스케줄러 완료 후 주석 제거
+        # send_to_aws_s3(_compress, times)
 
         # TODO : 데이터 스케줄링 시작 이전에 break 제거하기
-        break
+        # break
+
+    # print(_data)
+    for i in _data:
+        # print(i)  # i : 파일 패스
+        # print(_data[i]) # _data[i] : 파일 패스에 해당하는 데이터 리스트
+
+        # 데이터를 압축한다.
+        _compress = compress_dict(_data[i])
+        # print(_compress) # bytes
+        # print(len(_compress)) # zlib : 196 / gzip : 208
+
+        filepath = i+'log.txt'
+        # print(filepath)
+        # print()
+
+        send_to_aws_s3_path(_compress, filepath)
+
 
