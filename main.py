@@ -163,7 +163,13 @@ def send_to_aws_s3(data, times):
     # aws s3에 file_path의 위치에 data를 저장한다.
     s3.Object(aws_s3_bucket_name, file_path).put(Body=data)
 
-if __name__ == "__main__":
+
+def schedule_job():
+    """ 스케쥴링을 수행하는 함수 """
+    import datetime
+    
+    print(f'start schedule job : {datetime.datetime.now()}')
+
     # requests 모듈을 사용하여 데이터를 가져온다.
     url = "http://ec2-3-37-12-122.ap-northeast-2.compute.amazonaws.com/api/data/log"
     data = req_data(url)
@@ -206,12 +212,6 @@ if __name__ == "__main__":
             _data[path] = [_json]
 
 
-        # 생성된 파일을 AWS S3에 전송한다.
-        # TODO : 스케줄러 완료 후 주석 제거
-        # send_to_aws_s3(_compress, times)
-
-        # TODO : 데이터 스케줄링 시작 이전에 break 제거하기
-        # break
 
     # print(_data)
     for i in _data:
@@ -229,4 +229,13 @@ if __name__ == "__main__":
 
         send_to_aws_s3_path(_compress, filepath)
 
+    print('finish schedule job')
 
+from apscheduler.schedulers.blocking import BlockingScheduler
+
+if __name__ == "__main__":
+    scheduler = BlockingScheduler()
+    
+    scheduler.add_job(schedule_job, 'interval', seconds=5)
+
+    scheduler.start()
