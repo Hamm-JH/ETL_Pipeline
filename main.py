@@ -140,7 +140,8 @@ def send_to_aws_s3(data, times):
     # print(filename)
 
     # aws s3에 파일이 저장될 위치(파일 이름 포함)를 생성한다.
-    file_path = f"data/{times[0]}/{times[1]}/{times[2]}/{times[3]}/{filename}"
+    file_path = f"localtest/{times[0]}/{times[1]}/{times[2]}/{times[3]}/{filename}"
+    # file_path = f"data/{times[0]}/{times[1]}/{times[2]}/{times[3]}/{filename}"
     # print(path)
 
     # AWS S3에 접근하기 위한 클라이언트를 생성한다.
