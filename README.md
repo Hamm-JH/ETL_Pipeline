@@ -5,3 +5,4 @@
 - EC2 fetch test
 - EC2 push text
 - EC2 push text 2
+- EC2 push text final
