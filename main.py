@@ -40,6 +40,9 @@ def encode_b64uuid_64(b64uuid):
 
     return start32.string + end32.string
 
+# -----------------------------------------------------------------------------
+# converts_
+
 def convert_method_to_int(method):
     """ method를 int로 변환하는 함수 """
     if method == 'POST':
@@ -52,6 +55,9 @@ def convert_method_to_int(method):
         return 4
     else:
         return 0
+
+# -----------------------------------------------------------------------------
+# times_
 
 def timestamp_to_datetime(timestamp):
     """ 타임스탬프를 datetime으로 변환하는 함수 """
