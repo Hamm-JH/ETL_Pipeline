@@ -81,13 +81,18 @@ def string_to_timestamp(string):
     """ 문자열을 타임스탬프로 변환하는 함수 """
 
     return datetime_to_timestamp(string_to_datetime(string))
-    
+
+# -----------------------------------------------------------------------------
+# json_    
 
 def dump_data(data):
     """ 데이터를 파일로 저장하는 함수 """
     import json
 
     return json.dumps(data)
+
+# -----------------------------------------------------------------------------
+# compress_
 
 def compress_data(str_data):
     """ 데이터를 압축하는 함수 """

@@ -17,5 +17,9 @@
 # # print('this is modules/converts_ __init__.py')
 # import modules.converts_ as conv
 
-# print('this is modules/converts_ __init__.py')
-import modules.converts_ as conv
+# # print('this is modules/times_ __init__.py')
+# import modules.times_ as times
+
+# print('this is modules/compress_ __init__.py')
+import modules.compress_ as compress
+
