@@ -106,6 +106,9 @@ def compress_dict(dict_data):
     """ dict 데이터를 압축하는 함수 """
     return compress_data(dump_data(dict_data))
 
+# -----------------------------------------------------------------------------
+# converts_
+
 def convert_single_data(data):
     """ 하나의 데이터를 받아서 변환을 수행하고 결과를 반환한다. """
 
