@@ -8,5 +8,8 @@
 # # print('this is modules/cryptography_ __init__.py')
 # import modules.cryptography_ as crypto
 
-# print('this is modules/json_ __init__.py')
-import modules.json_ as json
+# # print('this is modules/json_ __init__.py')
+# import modules.json_ as json
+
+# print('this is modules/b64uuid_ __init__.py')
+import modules.b64uuid_ as b64

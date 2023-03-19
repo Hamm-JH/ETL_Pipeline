@@ -28,6 +28,9 @@ def str_to_json(str):
 
     return json.loads(str.replace("'", "\""))
 
+# -----------------------------------------------------------------------------
+# b64uuid
+
 def encode_b64uuid_64(b64uuid):
     """ b64uuid를 uuid로 변환하는 함수 """
     from b64uuid import B64UUID
