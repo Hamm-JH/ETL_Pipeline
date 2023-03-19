@@ -193,6 +193,8 @@ def send_to_aws_s3(data, times):
     # aws s3에 file_path의 위치에 data를 저장한다.
     s3.Object(aws_s3_bucket_name, file_path).put(Body=data)
 
+# -----------------------------------------------------------------------------
+# feat : scheduling
 
 def schedule_job():
     """ 스케쥴링을 수행하는 함수 """
@@ -260,7 +262,9 @@ def schedule_job():
         send_to_aws_s3_path(_compress, filepath)
 
     print('finish schedule job')
-    
+
+# -----------------------------------------------------------------------------
+# main
 
 from apscheduler.schedulers.blocking import BlockingScheduler
 
