@@ -230,6 +230,7 @@ def schedule_job():
         send_to_aws_s3_path(_compress, filepath)
 
     print('finish schedule job')
+    
 
 from apscheduler.schedulers.blocking import BlockingScheduler
 
