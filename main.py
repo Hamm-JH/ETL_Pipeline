@@ -1,4 +1,6 @@
 
+# -----------------------------------------------------------------------------
+# requests
 def req_data(url):
     """ url을 받아서 json 형태로 반환하는 함수 """
     import requests
@@ -7,6 +9,8 @@ def req_data(url):
 
     return response.json()
 
+# -----------------------------------------------------------------------------
+# cryptography
 def decrypt_data(key, data):
     """ 대칭키와 암호화된 데이터를 받아서 복호화된 데이터를 반환하는 함수 """
     from cryptography.fernet import Fernet
@@ -14,6 +18,9 @@ def decrypt_data(key, data):
     _fernet = Fernet(key)
 
     return _fernet.decrypt(data)
+
+# -----------------------------------------------------------------------------
+# json
 
 def str_to_json(str):
     """ 문자열을 json으로 변환하는 함수 """
