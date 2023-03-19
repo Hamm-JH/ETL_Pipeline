@@ -144,6 +144,9 @@ def convert_single_data(data):
 
     return _json
 
+# -----------------------------------------------------------------------------
+# json_
+
 def get_private_data():
     """ 개인 데이터를 가져오는 함수 """
     import json
@@ -152,6 +155,9 @@ def get_private_data():
         data = json.load(f)
     
     return data['aws_access_key_id'], data['aws_secret_access_key'], data['aws_s3_bucket_name']
+
+# -----------------------------------------------------------------------------
+# aws_
 
 def send_to_aws_s3_path(data, file_path):
     """ 데이터를 AWS S3에 전송하는 함수 """

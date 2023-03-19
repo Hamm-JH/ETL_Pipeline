@@ -20,6 +20,8 @@
 # # print('this is modules/times_ __init__.py')
 # import modules.times_ as times
 
-# print('this is modules/compress_ __init__.py')
-import modules.compress_ as compress
+# # print('this is modules/compress_ __init__.py')
+# import modules.compress_ as compress
 
+# print('this is modules/aws_ __init__.py')
+import modules.aws_ as aws
