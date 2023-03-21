@@ -23,5 +23,5 @@
 # # print('this is modules/compress_ __init__.py')
 # import modules.compress_ as compress
 
-# # print('this is modules/aws_ __init__.py')
-# import modules.aws_ as aws
+# print('this is modules/aws_ __init__.py')
+import modules.aws_ as aws

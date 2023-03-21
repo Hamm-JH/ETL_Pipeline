@@ -55,45 +55,6 @@ def get_private_data():
     
     return data
 
-    return data['aws_access_key_id'], data['aws_secret_access_key'], data['aws_s3_bucket_name']
-
-# -----------------------------------------------------------------------------
-# aws_
-
-def send_to_aws_s3_path(data, file_path):
-    """ 데이터를 AWS S3에 전송하는 함수 """
-    aws_access_key_id, aws_secret_access_key, aws_s3_bucket_name = get_private_data()
-
-    import boto3
-
-    # AWS S3에 접근하기 위한 클라이언트를 생성한다.
-    s3 = boto3.resource('s3', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key)
-
-    # AWS S3에 파일을 저장한다.
-    s3.Object(aws_s3_bucket_name, file_path).put(Body=data)
-    # s3.Bucket(aws_s3_bucket_name).put_object(Key=file_path, Body=data)
-
-def send_to_aws_s3(data, times):
-    """ 데이터를 AWS S3에 전송하는 함수 """
-    aws_access_key_id, aws_secret_access_key, aws_s3_bucket_name = get_private_data()
-
-    import boto3
-
-    # 파일 이름을 작성한다.
-    filename = f'{times[3]}:{times[4]}:{times[5]}.{times[6]}.txt'
-    # print(filename)
-
-    # aws s3에 파일이 저장될 위치(파일 이름 포함)를 생성한다.
-    # file_path = f"localtest/{times[0]}/{times[1]}/{times[2]}/{times[3]}/{filename}"
-    file_path = f"data/{times[0]}/{times[1]}/{times[2]}/{times[3]}/{filename}"
-    # print(path)
-
-    # AWS S3에 접근하기 위한 클라이언트를 생성한다.
-    s3 = boto3.resource('s3', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key)
-    
-    # aws s3에 file_path의 위치에 data를 저장한다.
-    s3.Object(aws_s3_bucket_name, file_path).put(Body=data)
-
 # -----------------------------------------------------------------------------
 # feat : scheduling
 
@@ -102,6 +63,7 @@ def schedule_job():
     import modules.requests_ as req
 
     import modules.compress_ as compress
+    import modules.aws_ as aws
 
     import datetime
     
@@ -161,11 +123,10 @@ def schedule_job():
         # print(len(_compress)) # zlib : 196 / gzip : 208
 
         filepath = i+'log.txt'
-        # print(filepath)
-        # print()
 
+        accessParams = get_private_data()
 
-        send_to_aws_s3_path(_compress, filepath)
+        aws.send_to_aws_s3_path(_compress, filepath, accessParams)
 
     print('finish schedule job')
 
@@ -175,10 +136,10 @@ def schedule_job():
 from apscheduler.schedulers.blocking import BlockingScheduler
 
 if __name__ == "__main__":
-    # scheduler = BlockingScheduler()
+    scheduler = BlockingScheduler()
     
-    # scheduler.add_job(schedule_job, 'interval', seconds=10)
+    scheduler.add_job(schedule_job, 'interval', seconds=10)
 
-    # scheduler.start()
+    scheduler.start()
 
-    schedule_job()
+    # schedule_job()
