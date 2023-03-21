@@ -53,6 +53,8 @@ def get_private_data():
     with open('env/private.json', 'r') as f:
         data = json.load(f)
     
+    return data
+
     return data['aws_access_key_id'], data['aws_secret_access_key'], data['aws_s3_bucket_name']
 
 # -----------------------------------------------------------------------------
@@ -99,7 +101,6 @@ def schedule_job():
     """ 스케쥴링을 수행하는 함수 """
     import modules.requests_ as req
 
-    import modules.times_ as times
     import modules.compress_ as compress
 
     import datetime
@@ -115,6 +116,8 @@ def schedule_job():
     # 먼저 데이터를 분할한다.
     # 파일 패스를 키값으로 설정
     for i in data:
+        import modules.times_ as times
+
         # print(i['recordId']) # ex) 5822
         # print(i['ArrivalTimeStamp']) # ex) 1678412891.818
         # print(i['data']) # ex) [암호화된 데이터]
@@ -160,6 +163,7 @@ def schedule_job():
         filepath = i+'log.txt'
         # print(filepath)
         # print()
+
 
         send_to_aws_s3_path(_compress, filepath)
 
