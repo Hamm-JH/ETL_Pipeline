@@ -1,2 +1,2 @@
 
-# print('this is modules __init__.py')
+print('this is modules __init__.py')

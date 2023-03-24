@@ -136,8 +136,10 @@ def schedule_job():
 from apscheduler.schedulers.blocking import BlockingScheduler
 
 if __name__ == "__main__":
-    scheduler = BlockingScheduler()
+    # scheduler = BlockingScheduler()
     
-    scheduler.add_job(schedule_job, 'interval', seconds=600)
+    # scheduler.add_job(schedule_job, 'interval', seconds=600)
 
-    scheduler.start()
+    # scheduler.start()
+
+    schedule_job()
