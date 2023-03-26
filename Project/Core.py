@@ -12,14 +12,17 @@ class Core:
         self.env = env
         pass
 
+    @abstractmethod
     def extract_url(self, url):
         """ url에서 데이터를 추출하는 함수 """
         pass
 
+    @abstractmethod
     def transform_data(self, data):
         """ 데이터를 변환하는 함수. 단일 데이터를 대상으로 한다. """
         pass
 
+    @abstractmethod
     def load_data(self, data):
         """ 데이터를 저장하는 함수 """
         pass
