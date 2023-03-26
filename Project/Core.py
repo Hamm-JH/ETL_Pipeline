@@ -23,6 +23,6 @@ class Core:
         pass
 
     @abstractmethod
-    def load_data(self, data):
+    def load_data(self, data, filepath, params):
         """ 데이터를 저장하는 함수 """
         pass
