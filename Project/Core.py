@@ -26,3 +26,8 @@ class Core:
     def load_data(self, data, filepath, params):
         """ 데이터를 저장하는 함수 """
         pass
+
+    @abstractmethod
+    def run(self):
+        """ 프로젝트를 수행하는 함수 """
+        pass

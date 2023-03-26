@@ -1,6 +1,9 @@
 from Core import Core
 
 class ETL_CP1(Core):
+    """
+    ETL_CP1 프로젝트용으로 작성한 클래스
+    """
     def __init__(self, env):
         super().__init__(env)
     
@@ -41,6 +44,8 @@ class ETL_CP1(Core):
         aws.send_to_aws_s3_path(data, filepath, params)
 
     def schedule_job(self):
+
+
         import modules.compress_ as compress
         import datetime
 
@@ -86,6 +91,17 @@ class ETL_CP1(Core):
             self.load_data(_compress, filepath, accessParams)
 
         print('finish schedule job')
+
+    def run(self):
+        import schedule
+        import time
+
+        # 1분마다 스케쥴링
+        schedule.every(1).minutes.do(self.schedule_job)
+
+        while True:
+            schedule.run_pending()
+            time.sleep(1)
 
 
 
