@@ -28,6 +28,6 @@ class Core:
         pass
 
     @abstractmethod
-    def run(self):
+    def run(self, interval_minutes=1):
         """ 프로젝트를 수행하는 함수 """
         pass

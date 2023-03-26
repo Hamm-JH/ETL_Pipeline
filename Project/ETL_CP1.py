@@ -92,12 +92,12 @@ class ETL_CP1(Core):
 
         print('finish schedule job')
 
-    def run(self):
+    def run(self, interval_minutes=1):
         import schedule
         import time
 
-        # 1분마다 스케쥴링
-        schedule.every(1).minutes.do(self.schedule_job)
+        # n분마다 스케쥴링
+        schedule.every(interval_minutes).minutes.do(self.schedule_job)
 
         while True:
             schedule.run_pending()
