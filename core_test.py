@@ -1,5 +1,5 @@
 
-from Project.Core import Core
+# from Project.Core import Core
 
 env_test = {
     "env" : "test",

@@ -7,12 +7,12 @@ class ETL_CP1(Core):
     def __init__(self, env):
         super().__init__(env)
     
-    def extract_url(self, url):
+    def _extract_url(self, url):
         import modules.requests_ as req
 
         return req.req_data(url)
 
-    def transform_data(self, data):
+    def _transform_data(self, data):
         """ 하나의 데이터를 받아서 변환을 수행하고 결과를 반환한다. """
         import modules.cryptography_ as crypto
         import modules.json_ as json_
@@ -39,11 +39,11 @@ class ETL_CP1(Core):
 
         return _json
 
-    def load_data(self, data, filepath, params):
+    def _load_data(self, data, filepath, params):
         import modules.aws_ as aws
         aws.send_to_aws_s3_path(data, filepath, params)
 
-    def schedule_job(self):
+    def _schedule_job(self):
 
 
         import modules.compress_ as compress
@@ -97,12 +97,11 @@ class ETL_CP1(Core):
         import time
 
         # n분마다 스케쥴링
-        schedule.every(interval_minutes).minutes.do(self.schedule_job)
+        schedule.every(interval_minutes).minutes.do(self._schedule_job)
 
         while True:
             schedule.run_pending()
             time.sleep(1)
-
 
 
 
