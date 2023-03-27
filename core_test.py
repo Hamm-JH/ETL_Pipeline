@@ -17,4 +17,5 @@ env_test = {
 from Project.ETL_CP1 import ETL_CP1
 
 etl = ETL_CP1(env_test)
-etl.run(1)
+etl.run(interval_minutes=1)
+
