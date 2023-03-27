@@ -1,0 +1,5 @@
+log_note/
+.env
+comp_log.json
+json_log.json
+gzip_log/
