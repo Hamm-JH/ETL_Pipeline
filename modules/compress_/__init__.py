@@ -8,6 +8,9 @@ def _json_dump_data(data):
 
     return json.dumps(data)
 
+"""
+TODO : 데이터 압축 모듈별로 압축함수 구현하기
+"""
 def compress_data(str_data):
     """ 데이터를 압축하는 함수 """
     import zlib
@@ -16,6 +19,9 @@ def compress_data(str_data):
     # import gzip
     # return gzip.compress(str_data.encode())
 
+"""
+TODO : 데이터 압축 해제 모듈별로 압축해제함수 구현하기
+"""
 def compress_dict(dict_data):
     """ dict 데이터를 압축하는 함수 """
     return compress_data(_json_dump_data(dict_data))
