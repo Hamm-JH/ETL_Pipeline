@@ -1,7 +1,8 @@
 
 ### 프로젝트 업데이트 일지를 적는 페이지
 
-### 23.03.28(화)
+<details>
+<summary>2023.03.28(화)</summary>
 
 > update/core-modules
 > 
@@ -12,3 +13,4 @@
 - [x]  암호화 관련 todo 업데이트
 - [x]  json 관련 todo 업데이트
 - [x]  requests 관련 todo 업데이트
+</details>
