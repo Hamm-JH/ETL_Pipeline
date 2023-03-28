@@ -8,3 +8,4 @@ print(bin(a ^ b))
 print(bin(~a))
 print(bin(a << 2))
 print(bin(a >> 2))
+
