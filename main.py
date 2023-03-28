@@ -88,8 +88,6 @@ def schedule_job():
         # 복호화된 데이터를 json(dict)으로 변환한다.
         # 각 데이터에서 개별적으로 변환이 필요한 부분에 변환을 수행한다.
         _json = convert_single_data(i)
-        # print(_json)
-        # print(type(_json))
 
         # # 데이터를 압축한다.
         # _compress = compress_dict(_json)
