@@ -1,8 +1,12 @@
 import pandas as pd
-import json
+import time
+import gzip
+import bz2
+import lzma
 import warnings
 warnings.filterwarnings('ignore')
 
+start = time.time()
 path = 'train_AT_TSALET_ALL\AT_TSALET_ALL_201601.csv'
 data = pd.read_csv(path)
 
@@ -25,10 +29,28 @@ def convert(df):
     df_copy.reset_index(drop=True, inplace=True)
     return df_copy
 
+# csv : EDA 전 327mb -> EDA 후 213mb
+# json : EDA 전 1.4gb -> EDA 후 617mb
 convert_data = convert(data)
+convert_data_json = convert_data.to_json(orient='index', indent=4, force_ascii=False)
+convert_data_encode = convert_data_json.encode()
 
-print(convert_data)
+zip1 = gzip.compress(convert_data_encode)
+zip2 = bz2.compress(convert_data_encode)
+zip3 = lzma.compress(convert_data_encode)
 
-# convert_data.to_csv('CP1/eda.csv')
+def save_file(path, string):
+    '''
+    파일 저장 함수
+    '''
+    with open(path, 'wb') as f:
+        f.write(string)
 
-convert_data.to_json('CP1/eda.json', orient='index', indent=4, force_ascii=False)
+save_file('CP2/eda_raw.txt', convert_data_encode) # 617mb
+save_file('CP2/eda_gzip.zip', zip1) # 21.5mb
+save_file('CP2/eda_bz2.bz2', zip2) # 14.3mb
+save_file('CP2/eda_lzma.lzma', zip3) # 18.1mb
+end = time.time()
+
+print(f"{end - start:.2f} sec")
+# 분산처리 전 161.22초 소요

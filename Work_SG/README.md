@@ -60,6 +60,13 @@
     - csv 파일 : EDA 전 327mb -> EDA 후 213mb
     - json 파일 : EDA 전 1.4gb -> EDA 후 617mb
 
+> 파일 압축 테스트
+- json 원본 파일을 gzip, bz2, lzma 라이브러리로 각각 압축 후 압축률 비교
+- json 원본 파일 : 617mb
+  - gzip : 21.5mb, 96.62%
+  - bz2 : 14.3mb, 97.69%
+  - lzma : 18.1mb, 97.07%
+
 > 발생한 오류와 해결
 - pandas 라이브러리 사용 중 SettingWithCopyWarning 에러 발생 <br>
   코드가 작동은 했지만 지속적으로 에러 메시지 발생<br>

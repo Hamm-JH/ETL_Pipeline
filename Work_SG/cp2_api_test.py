@@ -8,16 +8,26 @@ AT 도매시장 통합홈페이지 = https://at.agromarket.kr/index.do
 실시간 경락정보를 받을 수 있는 API로 대체
 '''
 
-import urllib.request
+import requests
+import os
 import json
-import datetime
+from dotenv import load_dotenv
+load_dotenv()
 
-today = datetime.datetime.today()
-yesterday = (today - datetime.timedelta(1)).strftime('%Y%m%d')
-url = 'https://www.nongnet.or.kr/api/whlslDstrQr.do?sdate='
+def get_page(s_date, s_bubin, s_pummok, s_sangi):
+    '''
+    api 데이터 호출 함수
+    '''
+    garak_id = os.environ.get('garak_id')
+    garak_passwd = os.environ.get('garak_passwd')
 
-response = urllib.request.urlopen(url+yesterday).read()
-data = json.loads(response)
+    url = f'http://www.garak.co.kr/publicdata/dataOpen.do?\
+        id={garak_id}&passwd={garak_passwd}&dataid=data12&pagesize=10\
+        &pageidx=1&portal.templet=false&s_date={s_date}\
+        &s_bubin={s_bubin}&s_pummok={s_pummok}&s_sangi={s_sangi}'
+    page = requests.get(url)
+    parsed_data = json.loads(page.text)
+    return page.text
 
-print(data)
-# 현재는 이용불가
+print(get_page(20230327, 11000101, '사과', ''))
+# 오류 발생 해결중
