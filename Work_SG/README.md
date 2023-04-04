@@ -88,3 +88,14 @@ convert_data.to_json('CP1/eda.json', orient='index', indent=4)
 ```python
 convert_data.to_json('CP1/eda.json', orient='index', indent=4, force_ascii=False)
 ```
+
+- json 데이터 파싱에러 발생 <br>
+  json.decoder.JSONDecodeError: Expecting value: line 12 column 1 (char 22)
+    - xmltodict 라이브러리 사용으로 해결
+```python
+import xmltodict
+page = requests.get(url)
+html = page.text
+
+html_dict = xmltodict.parse(html)
+```
