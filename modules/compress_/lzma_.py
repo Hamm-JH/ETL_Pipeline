@@ -1,20 +1,19 @@
 
 def compress_test():
-    print('zlib compress test')
+    print('lzma compress test')
 
 def decompress_test():
-    print('zlib decompress test')
+    print('lzma decompress test')
 
 def compress(data):
     """ 데이터를 압축하는 함수 """
-    # print(type(data))
     if type(data) == str:
         data = data.encode()
-
-    import zlib
-    return zlib.compress(data)
+        
+    import lzma
+    return lzma.compress(data)
 
 def decompress(data):
     """ 데이터를 압축해제하는 함수 """
-    import zlib
-    return zlib.decompress(data)
+    import lzma
+    return lzma.decompress(data)
