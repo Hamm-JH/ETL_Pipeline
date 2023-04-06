@@ -72,9 +72,9 @@ handle_decompress = {
 
 #endregion [compress_]
 
-def compress(data, compress='zlib'):
+def compress(data, method='zlib'):
     """ 데이터를 압축하는 함수 """
-    return handle_compress[compress](data)
+    return handle_compress[method](data)
 
 def compress_test(data, method='zlib'):
     """ 데이터를 압축하는 함수 """
@@ -86,9 +86,9 @@ def compress_test(data, method='zlib'):
     print('압축 결과:', compressed)
     # print('압축 해제 결과:', handle_decompress[compress](compressed))
 
-def decompress(data, compress='zlib'):
+def decompress(data, method='zlib'):
     """ 데이터를 압축해제하는 함수 """
-    return handle_decompress[compress](data).decode()
+    return handle_decompress[method](data).decode()
 
 def decompress_test(data, method='zlib'):
     """ 데이터를 압축해제하는 함수 """
