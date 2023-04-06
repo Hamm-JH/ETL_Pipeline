@@ -15,13 +15,17 @@ def datetime_to_timestamp(datetime):
 
     return time.mktime(datetime.timetuple())
 
-def string_to_datetime(string):
+def string_to_datetime(string, query='%Y-%m-%dT%H:%M:%S.%fZ'):
     """ 문자열을 datetime으로 변환하는 함수 """
     import datetime
 
-    return datetime.datetime.strptime(string, '%Y-%m-%dT%H:%M:%S.%fZ')
+    return datetime.datetime.strptime(string, query)
 
 def string_to_timestamp(string):
     """ 문자열을 타임스탬프로 변환하는 함수 """
 
     return datetime_to_timestamp(string_to_datetime(string))
+
+import datetime
+
+dt = datetime.datetime.now()

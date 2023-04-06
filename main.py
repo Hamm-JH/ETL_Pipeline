@@ -12,7 +12,7 @@ def convert_single_data(data):
 
     # 1 미리 주어진 대칭키를 이용한 복호화를 수행한다.
     key = b't-jdqnDewRx9kWithdsTMS21eLrri70TpkMq2A59jX8='
-    decrypt_str = crypto.decrypt_data(key, data['data']).decode('utf-8')
+    decrypt_str = crypto.decrypt(key, data['data']).decode('utf-8')
     # print(decrypt_str); print()
 
     # 2 복호화된 데이터를 json(dict)으로 변환한다.
@@ -71,7 +71,7 @@ def schedule_job():
 
     # requests 모듈을 사용하여 데이터를 가져온다.
     url = "http://ec2-3-37-12-122.ap-northeast-2.compute.amazonaws.com/api/data/log"
-    data = req.req_data(url)
+    data = req.request(url)
 
     _data = {}
 
