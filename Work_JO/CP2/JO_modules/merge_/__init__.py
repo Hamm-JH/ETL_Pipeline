@@ -5,6 +5,7 @@ def merge_df_1(path):
     """
     import os
     import pandas as pd
+    from JO_modules import extract_
 
     df_list1 = []
     df_list2 = []
@@ -15,7 +16,7 @@ def merge_df_1(path):
         file_list = os.listdir(dir_path)
         for file in file_list:
             file_path = f'{path}/{dir}/{file}'
-            df = extract_col_1(file_path)
+            df = extract_.extract_col_1(file_path)
             if len(df.columns) == 5:
                 df_list1.append(df)
             else:
