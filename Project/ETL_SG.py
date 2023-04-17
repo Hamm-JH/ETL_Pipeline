@@ -4,7 +4,7 @@ class ETL_SG(Core):
     """
     SG sub_project etl pipeline
     """
-    def __init__(self, env):
+    def __init__(self, env=None):
         super().__init__(env)
 
     def _extract_url(self, url, param = None):
@@ -24,9 +24,9 @@ class ETL_SG(Core):
         from dotenv import load_dotenv
         load_dotenv()
 
-        api_id = os.getenv('garak_id')
-        api_pw = os.getenv('garak_passwd')
-        url = 'http://www.garak.co.kr/publicdata/dataOpen.do?'
+        API_ID = os.getenv('garak_id')
+        API_PW = os.getenv('garak_passwd')
+        URL = 'http://www.garak.co.kr/publicdata/dataOpen.do?'
 
         bubin_list = ['11000101','11000102','11000103','11000104','11000105','11000106']
         pummok_list = ['감귤','감자','건고추','고구마','단감','당근','딸기','마늘','무',
@@ -39,8 +39,8 @@ class ETL_SG(Core):
             dict2 = {f'{pummok}': []}
             for bubin in bubin_list:
                 params = (
-                        ('id', api_id),
-                        ('passwd', api_pw),
+                        ('id', API_ID),
+                        ('passwd', API_PW),
                         ('dataid', 'data12'),
                         ('pagesize', '10'),
                         ('pageidx', '1'),
@@ -51,7 +51,7 @@ class ETL_SG(Core):
                         ('s_sangi', '')
                         )
                 dict3 = {f'{bubin}': []}
-                list_total_count = int(ETL_CP2._extract_url(self, url, param = None)['lists']['list_total_count'])
+                list_total_count = int(ETL_SG._extract_url(URL, params)['lists']['list_total_count'])
                 total_page = math.ceil(int(list_total_count) / 10)
 
                 if int(list_total_count) != 0:
@@ -68,7 +68,7 @@ class ETL_SG(Core):
                                     ('s_pummok', pummok),
                                     ('s_sangi', '')
                                 )
-                        html_dict = ETL_CP2._extract_url(url, params)
+                        html_dict = ETL_SG._extract_url(URL, params)
                         if list_total_count % 10 > 1:
                             for i in range(len(html_dict['lists']['list'])):
                                 dict3[f'{bubin}'].append({
