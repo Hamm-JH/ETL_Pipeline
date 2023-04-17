@@ -50,7 +50,7 @@ with DAG(
                 return flattened_data, directory
 
         etl._load_data(flattened_data, AWS_SERVICE_NAME, REGION, AWS_ACCESS_ID, AWS_SECRET_KEY, AWS_BUCKET_NAME, partitioning)
-        
+
 
     t1 = PythonOperator(
         task_id="extract",
