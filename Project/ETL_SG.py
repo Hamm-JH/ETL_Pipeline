@@ -6,11 +6,6 @@ class ETL_SG(Core):
     """
     def __init__(self, env=None):
         super().__init__(env)
-
-    def _extract_url(self, url, param = None):
-        import cp2_modules.extract_ as ext
-
-        return ext.extract(url, param)
     
     def _extract_data(self, date):
         """
@@ -23,6 +18,11 @@ class ETL_SG(Core):
         import pandas as pd
         from dotenv import load_dotenv
         load_dotenv()
+
+        def extract_url(url, param = None):
+            import cp2_modules.extract_ as ext
+
+            return ext.extract(url, param)
 
         API_ID = os.getenv('garak_id')
         API_PW = os.getenv('garak_passwd')
@@ -51,14 +51,14 @@ class ETL_SG(Core):
                         ('s_sangi', '')
                         )
                 dict3 = {f'{bubin}': []}
-                list_total_count = int(ETL_SG._extract_url(URL, params)['lists']['list_total_count'])
+                list_total_count = int(extract_url(URL, params)['lists']['list_total_count'])
                 total_page = math.ceil(int(list_total_count) / 10)
 
                 if int(list_total_count) != 0:
                     for page in range(1, total_page+1):
                         params = (
-                                    ('id', api_id),
-                                    ('passwd', api_pw),
+                                    ('id', API_ID),
+                                    ('passwd', API_PW),
                                     ('dataid', 'data12'),
                                     ('pagesize', '10'),
                                     ('pageidx', page),
@@ -68,7 +68,7 @@ class ETL_SG(Core):
                                     ('s_pummok', pummok),
                                     ('s_sangi', '')
                                 )
-                        html_dict = ETL_SG._extract_url(URL, params)
+                        html_dict = extract_url(URL, params)
                         if list_total_count % 10 > 1:
                             for i in range(len(html_dict['lists']['list'])):
                                 dict3[f'{bubin}'].append({
