@@ -6,7 +6,7 @@ def s3_load(data, aws_service_name, region, aws_access_id, aws_secret_key, aws_b
     import json
     import os
     import gzip
-    from modules import compress_
+    from cp2_modules import compress_
     from dotenv import load_dotenv
     load_dotenv()
 
