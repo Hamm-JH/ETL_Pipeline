@@ -1,15 +1,7 @@
-import sys
 from datetime import timedelta
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from datetime import datetime
-
-module_directiory = "슬기님환경의project폴더경로\Project"
-if module_directiory not in sys.path:
-    sys.path.append(module_directiory)
-
-from ETL_SG import ETL_SG
-
 
 with DAG(
     "etl_pipeline4",
@@ -28,18 +20,35 @@ with DAG(
 ) as dag:
     
     def etl():
-        AWS_SERVICE_NAME = 's3'
-        REGION = "ap-northeast-2"
+            import os
+            import gzip
+            import json
+            import boto3
+            from datetime import timedelta, datetime
+            from time import sleep
+            from dotenv import load_dotenv
+            load_dotenv()
 
-        AWS_ACCESS_ID = 'aws_access_key_id'
-        AWS_SECRET_KEY = 'aws_secret_access_key'
-        AWS_BUCKET_NAME = 'aws_s3_bucket_name'
+            from ETL_SG import ETL_SG
 
-        etl = ETL_SG()
 
-        flattened_data = etl._extract_data(date)
+            AWS_SERVICE_NAME = 's3'
+            REGION = "ap-northeast-2"
 
-        def partitioning(flattened_data):
+            AWS_ACCESS_ID = 'aws_access_key_id'
+            AWS_SECRET_KEY = 'aws_secret_access_key'
+            AWS_BUCKET_NAME = 'aws_s3_bucket_name'
+
+            etl = ETL_SG()
+
+            today = datetime.today()
+
+            yesterday = (today - timedelta(days=1)).strftime('%Y%m%d')
+
+            date = '20230415'
+
+            flattened_data = etl._extract_data(yesterday)
+
             if len(flattened_data) != 0:
                 year = flattened_data[0]['ADJ_DT'][0:4]
                 month = flattened_data[0]['ADJ_DT'][4:6]
@@ -47,9 +56,30 @@ with DAG(
 
                 directory = f'{year}/{month}/{date}.json.gz'
 
-                return flattened_data, directory
+            aws_access_key_id = os.getenv(AWS_ACCESS_ID)
+            aws_secret_access_key = os.getenv(AWS_SECRET_KEY)
 
-        etl._load_data(flattened_data, AWS_SERVICE_NAME, REGION, AWS_ACCESS_ID, AWS_SECRET_KEY, AWS_BUCKET_NAME, partitioning)
+            try:
+                s3 = boto3.client(
+                    service_name= AWS_SERVICE_NAME,
+                    region_name= REGION,
+                    aws_access_key_id = aws_access_key_id,
+                    aws_secret_access_key = aws_secret_access_key,
+                )
+            except Exception as e:
+                print(e)
+            else:
+                print("s3 bucket connected!") 
+
+            compressed_data = gzip.compress(json.dumps(flattened_data, ensure_ascii=False, indent=4).encode('utf-8'))
+            
+            aws_s3_bucket_name = os.getenv(AWS_BUCKET_NAME)
+            
+            s3.put_object(
+                Bucket = aws_s3_bucket_name,
+                Body = compressed_data,
+                Key = directory,
+                )
 
 
     t1 = PythonOperator(
