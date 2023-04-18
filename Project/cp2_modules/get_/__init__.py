@@ -34,4 +34,9 @@ def get_json(date, aws_access_key_id, aws_secret_access_key, aws_s3_bucket_name,
         content = gz.read()
 
     json_data = json.loads(content)
-    return json_data
+
+    
+    import pandas as pd
+    df = pd.DataFrame(json_data)
+    
+    return df
