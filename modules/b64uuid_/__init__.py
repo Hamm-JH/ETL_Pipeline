@@ -10,6 +10,12 @@ def encode_b64uuid_64(b64uuid):
 
     return start32.string + end32.string
 
+
 def decode_b64uuid_64(uuid):
     """ uuid -> b64uuid """
-    pass
+    from b64uuid import B64UUID
+
+    start32 = B64UUID(uuid[:32])
+    end32 = B64UUID(uuid[32:])
+
+    return start32.b64 + end32.b64

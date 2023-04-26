@@ -1,0 +1,6 @@
+boto3 == 1.26.94
+python-dotenv == 1.0.0
+xmltodict==0.13.0
+requests==2.28.2
+pyspark==3.0.2
+pandas==1.5.3
