@@ -2,7 +2,7 @@ from Core import Core
 
 class ETL_SG(Core):
     """
-    SG sub_project etl pipeline
+    sub_project : project 1.0 etl pipeline
     """
     def __init__(self, env=None):
         super().__init__(env)
