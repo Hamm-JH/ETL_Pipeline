@@ -1,0 +1,7 @@
+BUG : bug example
+HACK : hack example
+FIXME : fixme example
+TODO : todo example
+XXX : xxx example
+[ ] : do Something
+[x] : do nothing

@@ -31,3 +31,8 @@ class Core:
     def run(self, interval_minutes=1):
         """ 프로젝트를 수행하는 함수 """
         pass
+
+    @abstractmethod
+    def _get_data(self):
+        """ s3로부터 저장된 데이터를 받아오는 함수 """
+        pass

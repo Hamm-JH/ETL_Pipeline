@@ -1,0 +1,56 @@
+import pandas as pd
+import time
+import gzip
+import bz2
+import lzma
+import warnings
+warnings.filterwarnings('ignore')
+
+start = time.time()
+path = 'train_AT_TSALET_ALL\AT_TSALET_ALL_201601.csv'
+data = pd.read_csv(path)
+
+def convert(df):
+    '''
+    데이터 EDA 함수
+    '''
+
+    df_copy = df.query(
+        '(DAN_NM == "kg") and ((POJ_NM == "상자") or (POJ_NM == ".")) and ((QTY > 0) and (TOT_QTY > 0) and (COST > 0) and (TOT_AMT > 0) and (DANQ > 0))' 
+    )
+    df_copy.drop(['CMP_NM', 'SIZE_NM', 'DAN_NM', 'POJ_NM', 'TOT_QTY', 'TOT_AMT'], axis=1, inplace=True)
+
+    df_copy['LV_NM'] = df_copy.LV_NM.str.replace('.','등외').str.replace('4등','등외').str.replace('5등','등외').str.replace('6등','등외').str.replace('7등','등외').str.replace('8등','등외')
+    df_copy = df_copy.drop(df_copy.query('(LV_NM == "저농약농산물") or (LV_NM == "무농약농산물") or (LV_NM == "유기농산물")').index)
+
+    df_copy['KIND_NM'] = df_copy['KIND_NM'].str.replace('[^가-힣]','', regex=True)
+    df_copy['COST'] = df_copy['COST'].astype(int)
+    df_copy.dropna(inplace=True)
+    df_copy.reset_index(drop=True, inplace=True)
+    return df_copy
+
+# csv : EDA 전 327mb -> EDA 후 213mb
+# json : EDA 전 1.4gb -> EDA 후 617mb
+convert_data = convert(data)
+convert_data_json = convert_data.to_json(orient='index', indent=4, force_ascii=False)
+convert_data_encode = convert_data_json.encode()
+
+zip1 = gzip.compress(convert_data_encode)
+zip2 = bz2.compress(convert_data_encode)
+zip3 = lzma.compress(convert_data_encode)
+
+def save_file(path, string):
+    '''
+    파일 저장 함수
+    '''
+    with open(path, 'wb') as f:
+        f.write(string)
+
+save_file('CP2/eda_raw.txt', convert_data_encode) # 617mb
+save_file('CP2/eda_gzip.zip', zip1) # 21.5mb
+save_file('CP2/eda_bz2.bz2', zip2) # 14.3mb
+save_file('CP2/eda_lzma.lzma', zip3) # 18.1mb
+end = time.time()
+
+print(f"{end - start:.2f} sec")
+# 분산처리 전 161.22초 소요
